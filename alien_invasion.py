@@ -121,7 +121,10 @@ class AlienInvasion:
         current_x, current_y = star_width, star_height
         while current_y < (self.settings.screen_height - star_height):
             while current_x < (self.settings.screen_width - star_width):
-                self._create_star(current_x + randint(-100, 100), current_y + randint(-100, 100))
+                random_numbers = []
+                for i in range(0, 2):
+                    random_numbers.append(randint(-100, 100))
+                self._create_star(current_x + random_numbers[0], current_y + random_numbers[1])
                 current_x += 2 * star_width
             current_x = star_width
             current_y += 2 * star_height
