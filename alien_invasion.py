@@ -119,12 +119,24 @@ class AlienInvasion:
         star_width, star_height = star.rect.size
 
         current_x, current_y = star_width, star_height
-        while current_y < (self.settings.screen_height )
+        while current_y < (self.settings.screen_height - star_height):
+            while current_x < (self.settings.screen_width - star_width):
+                self._create_star(current_x + randint(-100, 100), current_y + randint(-100, 100))
+                current_x += 2 * star_width
+            current_x = star_width
+            current_y += 2 * star_height
 
+    def _create_star(self, x_position, y_position):
+        new_star = Blue_Star(self)
+        new_star.x = x_position
+        new_star.rect.x = x_position
+        new_star.rect.y = y_position
+        self.blue_star.add(new_star)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
+        self.blue_star.draw(self.screen)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme()
