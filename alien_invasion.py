@@ -5,6 +5,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from blue_star import Blue_Star
+from asteroids import Asteroid
 from random import randint
 
 class AlienInvasion:
@@ -26,6 +27,7 @@ class AlienInvasion:
 
         self.ship = Ship(self)
         self.blue_star = pygame.sprite.Group()
+        self.asteroids = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
 
@@ -37,6 +39,8 @@ class AlienInvasion:
         """Start the main loop for the game."""
         while True:
             self._check_events()
+            self._create_asteroids()
+            self._update_asteroids()
             self.ship.update()
             self._update_bullets()
             self._update_aliens()
@@ -96,6 +100,12 @@ class AlienInvasion:
         self._check_fleet_edges()
         self.aliens.update()
 
+    def _update_asteroids(self):
+        self.asteroids.update()
+        for asteroid in self.asteroids.copy():
+            if asteroid.rect.top >= self.settings.screen_height:
+                self.asteroids.remove(asteroid)
+
     def _create_fleet(self):
         """Create the fleet of aliens."""
         # Make an alien.
@@ -154,6 +164,22 @@ class AlienInvasion:
         new_star.rect.x = x_position
         new_star.rect.y = y_position
         self.blue_star.add(new_star)
+
+    def _create_asteroids(self):
+        asteroid = Asteroid(self)
+        asteroid_width, asteroid_height = asteroid.rect.size
+
+        current_x, current_y = asteroid_width, asteroid_height
+        if randint(0, 100) < 10:
+            self._create_asteroid(randint(current_x, (self.settings.screen_width - current_x)), 
+                current_y)
+
+    def _create_asteroid(self, x_position, y_position):
+        new_asteroid = Asteroid(self)
+        new_asteroid.x = x_position
+        new_asteroid.rect.x = x_position
+        new_asteroid.rect.y = y_position
+        self.asteroids.add(new_asteroid)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
