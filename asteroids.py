@@ -23,5 +23,5 @@ class Asteroid(Sprite):
 		self.y = float(self.rect.y)
 
 	def update(self):
-		self.y += 5
+		self.y += 3
 		self.rect.y = self.y

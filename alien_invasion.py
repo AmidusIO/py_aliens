@@ -20,7 +20,8 @@ class AlienInvasion:
 
         #self.screen=pygame.display.set_mode((self.settings.screen_width,
         #    self.settings.screen_height))
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        pygame.display.set_icon(pygame.image.load('images/icon.png'))
+        self.screen = pygame.display.set_mode((1200, 800))
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
@@ -170,9 +171,9 @@ class AlienInvasion:
         asteroid_width, asteroid_height = asteroid.rect.size
 
         current_x, current_y = asteroid_width, asteroid_height
-        if randint(0, 100) < 10:
+        if randint(0, 400) < 10:
             self._create_asteroid(randint(current_x, (self.settings.screen_width - current_x)), 
-                current_y)
+                -100)
 
     def _create_asteroid(self, x_position, y_position):
         new_asteroid = Asteroid(self)
@@ -185,6 +186,7 @@ class AlienInvasion:
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
         self.blue_star.draw(self.screen)
+        self.asteroids.draw(self.screen)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme()
@@ -195,5 +197,6 @@ class AlienInvasion:
 
 if __name__ == '__main__':
     # Make a game instance, and run the game.
-    ai = AlienInvasion()
-    ai.run_game()
+    #ai = AlienInvasion()
+    #ai.run_game()
+    AlienInvasion().run_game()
