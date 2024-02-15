@@ -15,7 +15,8 @@ class Ship:
 		self.rect = self.image.get_rect()
 
 		# Start the ship at the bottom center of the screen.
-		self.rect.midbottom = self.screen_rect.midbottom
+		#self.rect.midbottom = self.screen_rect.midbottom
+		self.center_ship()
 
 		# Store a float for the ship's exact horizontal position.
 		self.x = float(self.rect.x)
@@ -24,6 +25,11 @@ class Ship:
 		self.moving_right = False
 		self.moving_left = False
 		self.boost = False
+
+	def center_ship(self):
+		"""Center the ship on the screen."""
+		self.rect.midbottom = self.screen_rect.midbottom
+		self.x = float(self.rect.x)
 
 	def update(self):
 		# Local variable for self.settings.ship_speed
