@@ -13,7 +13,6 @@ class Asteroid(Sprite):
 		super().__init__()
 		self.screen = ai_game.screen
 
-
 		self.image = pygame.image.load(asteroid_list[randint(0, 8)])
 		self.rect = self.image.get_rect()
 

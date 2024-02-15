@@ -1,12 +1,17 @@
 import sys
+from time import sleep
+from random import randint
+
 import pygame
+
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from blue_star import Blue_Star
 from asteroids import Asteroid
-from random import randint
+
 
 class AlienInvasion:
     """Class to manage game assets and behavior."""
@@ -22,9 +27,12 @@ class AlienInvasion:
         #    self.settings.screen_height))
         pygame.display.set_icon(pygame.image.load('images/icon.png'))
         self.screen = pygame.display.set_mode((1200, 800))
-        self.settings.screen_width = self.screen.get_rect().width
-        self.settings.screen_height = self.screen.get_rect().height
+        #self.settings.screen_width = self.screen.get_rect().width
+        #self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
+
+        # Create an instance to store game statistics.
+        self.stats = GameStats(self)
 
         self.ship = Ship(self)
         self.blue_star = pygame.sprite.Group()
@@ -96,10 +104,26 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
 
+            self._check_bullet_alien_collisions()
+        
+    def _check_bullet_alien_collisions(self):
+        # Check for any bullets that have hit aliens.
+        #   If so, get rid of the bullet and the alien.
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+
+        if not self.aliens:
+            # Destroy existing bullets and create new fleet.
+            self.bullets.empty()
+            self._create_fleet()
+
     def _update_aliens(self):
         """Update the positions of all aliens in the fleet."""
         self._check_fleet_edges()
         self.aliens.update()
+
+        # Look for alien-ship collisions.
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            print("Ship hit!!!")
 
     def _update_asteroids(self):
         self.asteroids.update()
@@ -172,8 +196,8 @@ class AlienInvasion:
 
         current_x, current_y = asteroid_width, asteroid_height
         if randint(0, 400) < 10:
-            self._create_asteroid(randint(current_x, (self.settings.screen_width - current_x)), 
-                -100)
+            self._create_asteroid(randint(0, self.settings.screen_width), 
+                0)
 
     def _create_asteroid(self, x_position, y_position):
         new_asteroid = Asteroid(self)
